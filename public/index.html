@@ -10,40 +10,46 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #050506;
-  --bg-raised: #0a0a0c;
-  --bg-sidebar: #08080a;
-  --bg-card: #0e0e11;
-  --bg-card-hover: #141418;
-  --bg-input: #0a0a0d;
-  --bg-surface: #111114;
-  --border: #1a1a1f;
-  --border-hover: #26262d;
-  --border-active: #35353d;
-  --border-subtle: #141418;
-  --text: #d4d4d8;
-  --text-dim: #52525b;
-  --text-mid: #a1a1aa;
-  --text-bright: #fafafa;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --accent-dim: rgba(99,102,241,0.08);
-  --accent-glow: rgba(99,102,241,0.12);
-  --accent-border: rgba(99,102,241,0.2);
+  /* Backgrounds */
+  --bg: #0a0e1a;
+  --bg-raised: #0d1220;
+  --bg-sidebar: #0b0f1c;
+  --bg-card: #131726;
+  --bg-card-hover: #182030;
+  --bg-input: #0e1220;
+  --bg-surface: #101520;
+  /* Borders */
+  --border: #1f2937;
+  --border-hover: #2d3748;
+  --border-active: #374151;
+  --border-subtle: #1a2030;
+  /* Text */
+  --text: #cbd5e1;
+  --text-dim: #475569;
+  --text-mid: #94a3b8;
+  --text-bright: #f1f5f9;
+  /* Brand: cyan/teal primary */
+  --accent: #0ea5e9;
+  --accent-light: #38bdf8;
+  --accent-dim: rgba(14,165,233,0.08);
+  --accent-glow: rgba(14,165,233,0.14);
+  --accent-border: rgba(14,165,233,0.25);
+  /* Purple accent */
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139,92,246,0.08);
+  --purple-glow: rgba(139,92,246,0.12);
+  --purple-border: rgba(139,92,246,0.22);
+  /* Semantic colors */
   --green: #10b981;
   --green-dim: rgba(16,185,129,0.08);
   --green-glow: rgba(16,185,129,0.15);
-  --green-border: rgba(16,185,129,0.2);
+  --green-border: rgba(16,185,129,0.22);
   --red: #ef4444;
   --red-dim: rgba(239,68,68,0.08);
   --amber: #f59e0b;
   --amber-dim: rgba(245,158,11,0.08);
   --amber-glow: rgba(245,158,11,0.12);
-  --amber-border: rgba(245,158,11,0.2);
-  --purple: #a78bfa;
-  --purple-dim: rgba(167,139,250,0.08);
-  --purple-glow: rgba(167,139,250,0.12);
-  --purple-border: rgba(167,139,250,0.2);
+  --amber-border: rgba(245,158,11,0.22);
   --blue: #3b82f6;
   --blue-dim: rgba(59,130,246,0.08);
   --blue-border: rgba(59,130,246,0.2);
@@ -51,16 +57,17 @@
   --rose-dim: rgba(251,113,133,0.08);
   --rose-glow: rgba(251,113,133,0.12);
   --rose-border: rgba(251,113,133,0.2);
-  --cyan: #22d3ee;
-  --cyan-dim: rgba(34,211,238,0.08);
-  --radius: 10px;
+  --cyan: #0ea5e9;
+  --cyan-dim: rgba(14,165,233,0.08);
+  /* Spacing / layout */
+  --radius: 12px;
   --radius-sm: 8px;
   --radius-xs: 6px;
   --radius-pill: 100px;
   --font: 'Instrument Sans', -apple-system, system-ui, sans-serif;
   --mono: 'IBM Plex Mono', 'Menlo', monospace;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.6);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
   --shadow-xl: 0 16px 48px rgba(0,0,0,0.6);
   --sidebar-w: 240px;
@@ -688,11 +695,11 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent
 .btn-primary:active:not(:disabled) { transform: scale(0.98); }
 
 .btn-amber {
-  background: linear-gradient(135deg, var(--amber), #d97706);
-  color: #0a0a0a;
-  box-shadow: 0 2px 8px rgba(245,158,11,0.2);
+  background: linear-gradient(135deg, var(--accent), #0284c7);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(14,165,233,0.22);
 }
-.btn-amber:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(245,158,11,0.3); }
+.btn-amber:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(14,165,233,0.35); transform: translateY(-1px); }
 .btn-purple {
   background: linear-gradient(135deg, var(--purple), #7c3aed);
   color: #fff;
@@ -768,8 +775,8 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent
   animation: pipelinePulse 2s ease-in-out infinite;
 }
 @keyframes pipelinePulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
-  50% { opacity: 0.5; box-shadow: 0 0 0 4px rgba(99,102,241,0); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(14,165,233,0.45); }
+  50% { opacity: 0.5; box-shadow: 0 0 0 4px rgba(14,165,233,0); }
 }
 
 .pipeline-pct {
@@ -1525,10 +1532,12 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent
   color: var(--text-mid);
   margin-bottom: 0.3rem;
 }
-.settings-field .field-hint {
-  font-size: 0.65rem;
+.settings-field .field-hint,
+.field-hint {
+  font-size: 0.68rem;
   color: var(--text-dim);
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
+  line-height: 1.5;
 }
 .settings-field input[type="password"],
 .settings-field input[type="text"],
@@ -1573,12 +1582,12 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  background: linear-gradient(135deg, var(--accent), #0284c7);
   color: #fff;
   transition: color .15s, background .15s, border-color .15s, opacity .15s, transform .15s;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.2);
+  box-shadow: 0 2px 8px rgba(14,165,233,0.22);
 }
-.btn-save-settings:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.35); }
+.btn-save-settings:hover { box-shadow: 0 4px 16px rgba(14,165,233,0.35); transform: translateY(-1px); }
 .settings-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem; }
 .settings-saved-msg {
   font-size: 0.72rem;
@@ -1590,45 +1599,33 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent
 .settings-saved-msg.show { opacity: 1; }
 
 /* ═══════════════════════════════════════════════
-   REFINEMENT LAYER — editorial-craft polish
+   DESIGN LAYER — unified cyan dark theme
    ═══════════════════════════════════════════════ */
 :root {
-  --display: 'Fraunces', 'Instrument Sans', serif;
-  --brand: #ef4444;
-  --brand-warm: #fb923c;
-  --brand-soft: rgba(239,68,68,0.12);
-  --brand-glow: rgba(239,68,68,0.18);
-  --brand-border: rgba(239,68,68,0.28);
-  --ink: #f5f5f3;
-  --paper: #0b0b0d;
-  --paper-raised: #111114;
-  --hair: rgba(255,255,255,0.06);
-  --hair-strong: rgba(255,255,255,0.12);
+  --brand: #0ea5e9;
+  --brand-warm: #38bdf8;
+  --brand-soft: rgba(14,165,233,0.10);
+  --brand-glow: rgba(14,165,233,0.16);
+  --brand-border: rgba(14,165,233,0.28);
+  --ink: #f1f5f9;
+  --paper: #0a0e1a;
+  --hair: rgba(255,255,255,0.05);
+  --hair-strong: rgba(255,255,255,0.10);
 }
 
-/* atmosphere: warm gradient mesh + film grain */
+/* body atmosphere — cool dark */
 body {
   background:
-    radial-gradient(1200px 700px at 85% -10%, rgba(251,146,60,0.08), transparent 60%),
-    radial-gradient(900px 600px at -10% 110%, rgba(239,68,68,0.06), transparent 55%),
-    radial-gradient(1400px 900px at 50% 50%, rgba(255,255,255,0.015), transparent 70%),
+    radial-gradient(1100px 600px at 80% -5%, rgba(14,165,233,0.06), transparent 55%),
+    radial-gradient(800px 500px at -8% 105%, rgba(139,92,246,0.05), transparent 50%),
     var(--paper);
   color: var(--ink);
 }
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0 0.88  0 0 0 0.12 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  opacity: 0.35;
-  mix-blend-mode: overlay;
-}
 .sidebar, .main-wrapper { position: relative; z-index: 1; }
 
-/* sidebar — refined identity */
+/* sidebar */
 .sidebar {
-  background: linear-gradient(180deg, rgba(14,14,17,0.92), rgba(8,8,10,0.96));
+  background: linear-gradient(180deg, rgba(11,15,28,0.95), rgba(9,12,22,0.97));
   border-right: 1px solid var(--hair);
   backdrop-filter: blur(20px) saturate(1.1);
   -webkit-backdrop-filter: blur(20px) saturate(1.1);
@@ -1639,33 +1636,31 @@ body::before {
 }
 .sidebar-logo {
   width: 30px; height: 30px;
-  background: conic-gradient(from 210deg, #ef4444, #fb923c, #ef4444);
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
   border-radius: 9px;
-  box-shadow: 0 0 0 1px rgba(239,68,68,0.3), 0 8px 24px rgba(239,68,68,0.15);
+  box-shadow: 0 0 0 1px rgba(14,165,233,0.3), 0 6px 20px rgba(14,165,233,0.18);
 }
 .sidebar-brand {
-  font-family: var(--display);
-  font-weight: 600;
-  font-style: italic;
-  font-size: 18px;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02em;
   color: var(--ink);
-  font-variation-settings: "opsz" 48;
 }
 .sidebar-tag {
   font-family: var(--mono);
   font-size: 9px;
-  letter-spacing: 0.15em;
-  background: linear-gradient(135deg, var(--brand), var(--brand-warm));
-  color: #1a0a06;
+  letter-spacing: 0.12em;
+  background: rgba(14,165,233,0.15);
+  color: var(--brand-warm);
   padding: 2px 7px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-weight: 600;
+  border: 1px solid rgba(14,165,233,0.2);
 }
 .sidebar-label {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   color: var(--text-dim);
   text-transform: uppercase;
   padding: 14px 20px 6px;
@@ -1674,7 +1669,7 @@ body::before {
   position: relative;
   border-radius: 8px;
   margin: 1px 10px;
-  transition: all 0.25s var(--ease);
+  transition: all 0.2s var(--ease);
 }
 .sidebar-item::before {
   content: '';
@@ -1684,41 +1679,40 @@ body::before {
   background: var(--brand);
   border-radius: 0 2px 2px 0;
   transform: translateY(-50%);
-  transition: height 0.3s var(--ease);
+  transition: height 0.25s var(--ease);
 }
 .sidebar-item.active {
-  background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02));
+  background: rgba(14,165,233,0.08);
   color: var(--ink);
+  border-color: rgba(14,165,233,0.18);
 }
 .sidebar-item.active::before { height: 18px; }
 .sidebar-item:hover:not(.active) {
   background: rgba(255,255,255,0.03);
 }
 
-/* toolbar — quiet glass */
+/* toolbar */
 .toolbar {
-  background: rgba(11,11,13,0.72);
+  background: rgba(10,14,26,0.85);
   border-bottom: 1px solid var(--hair);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  height: 56px;
+  height: 52px;
 }
 .toolbar-nav-btn {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font);
+  font-size: 13px;
   border-radius: 6px;
 }
 .toolbar-nav-btn.active {
-  background: rgba(239,68,68,0.08);
+  background: rgba(14,165,233,0.08);
   color: var(--brand-warm);
   box-shadow: inset 0 0 0 1px var(--brand-border);
 }
 .toolbar-status {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   color: var(--text-dim);
   text-transform: uppercase;
 }
@@ -1738,44 +1732,41 @@ body::before {
   50% { opacity: 0.35; }
 }
 
-/* section headings — editorial */
-.section-header { margin-bottom: 2.5rem; }
+/* section headings */
+.section-header { margin-bottom: 2rem; }
 .section-header h2 {
-  font-family: var(--display);
-  font-weight: 500;
-  font-style: italic;
-  font-size: clamp(28px, 3.2vw, 42px);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
   color: var(--ink);
-  font-variation-settings: "opsz" 144;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .section-header p {
   font-size: 14px;
   color: var(--text-mid);
-  max-width: 58ch;
+  max-width: 60ch;
   line-height: 1.55;
 }
 
-/* mode cards — craft-refined */
-.mode-grid { gap: 18px; }
+/* mode cards */
+.mode-grid { gap: 16px; }
 .mode-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(20,20,24,0.7), rgba(14,14,17,0.7));
-  border: 1px solid var(--hair);
-  border-radius: 14px;
-  padding: 26px 24px 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
   overflow: hidden;
-  transition: transform 0.4s var(--ease), border-color 0.3s var(--ease), box-shadow 0.4s var(--ease);
+  transition: transform 0.3s var(--ease), border-color 0.25s var(--ease), box-shadow 0.3s var(--ease);
 }
 .mode-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(500px 200px at 0% 0%, rgba(239,68,68,0.06), transparent 60%);
+  background: radial-gradient(400px 200px at 0% 0%, rgba(14,165,233,0.06), transparent 60%);
   opacity: 0;
-  transition: opacity 0.4s var(--ease);
+  transition: opacity 0.3s var(--ease);
   pointer-events: none;
 }
 .mode-card::after {
@@ -1783,61 +1774,58 @@ body::before {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
 }
 .mode-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--brand-border);
-  box-shadow: 0 20px 40px -20px rgba(239,68,68,0.25), 0 0 0 1px rgba(239,68,68,0.08);
+  box-shadow: 0 16px 32px -16px rgba(14,165,233,0.2), 0 0 0 1px rgba(14,165,233,0.06);
 }
 .mode-card:hover::before { opacity: 1; }
 .mode-icon {
   display: inline-flex;
   align-items: center; justify-content: center;
-  width: 42px; height: 42px;
+  width: 40px; height: 40px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(251,146,60,0.06));
+  background: rgba(14,165,233,0.10);
   color: var(--brand-warm);
-  border: 1px solid var(--brand-border);
-  margin-bottom: 16px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid rgba(14,165,233,0.2);
+  margin-bottom: 14px;
 }
 .mode-card:hover .mode-icon {
-  background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(251,146,60,0.12));
+  background: rgba(14,165,233,0.18);
 }
 .mode-title {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.02em;
   color: var(--ink);
-  font-variation-settings: "opsz" 72;
   margin-bottom: 6px;
 }
 .mode-desc {
   font-size: 13px;
   color: var(--text-mid);
   line-height: 1.55;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .mode-badge {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 4px 9px;
+  padding: 3px 8px;
   border-radius: 4px;
 }
 
-/* CDP button — warmer */
+/* CDP button */
 .sidebar-cdp {
   border: 1px solid var(--hair);
   border-radius: 9px;
-  transition: all 0.3s var(--ease);
+  transition: all 0.25s var(--ease);
 }
 .sidebar-cdp:hover {
   border-color: var(--brand-border);
-  background: rgba(239,68,68,0.04);
+  background: rgba(14,165,233,0.04);
 }
 .cdp-dot {
   box-shadow: 0 0 8px currentColor;
@@ -1845,7 +1833,7 @@ body::before {
 .cdp-label {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
 }
 .cdp-status {
@@ -1854,26 +1842,26 @@ body::before {
   color: var(--text-dim);
 }
 
-/* buttons — refined primary */
+/* buttons — primary */
 button.primary, .btn-primary, button[type="submit"]:not(.danger) {
-  background: linear-gradient(135deg, var(--brand), #dc2626);
+  background: linear-gradient(135deg, var(--brand), #0284c7);
   border: none;
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(239,68,68,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
-  transition: all 0.25s var(--ease);
+  box-shadow: 0 4px 14px rgba(14,165,233,0.22), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.2s var(--ease);
 }
 button.primary:hover, .btn-primary:hover, button[type="submit"]:not(.danger):hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(239,68,68,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  box-shadow: 0 8px 22px rgba(14,165,233,0.32), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
-/* inputs — subtle refinement */
+/* inputs */
 input[type="text"], input[type="email"], input[type="password"],
 input[type="number"], input[type="url"], textarea, select {
-  background: rgba(10,10,13,0.6);
-  border: 1px solid var(--hair);
+  background: rgba(10,14,26,0.7);
+  border: 1px solid var(--border);
   border-radius: 8px;
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
@@ -1886,26 +1874,26 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 
 /* page-load stagger */
 .section-header, .mode-card {
-  animation: rise 0.7s var(--ease) both;
+  animation: rise 0.6s var(--ease) both;
 }
-.mode-card:nth-child(1) { animation-delay: 0.06s; }
-.mode-card:nth-child(2) { animation-delay: 0.12s; }
-.mode-card:nth-child(3) { animation-delay: 0.18s; }
-.mode-card:nth-child(4) { animation-delay: 0.24s; }
+.mode-card:nth-child(1) { animation-delay: 0.05s; }
+.mode-card:nth-child(2) { animation-delay: 0.10s; }
+.mode-card:nth-child(3) { animation-delay: 0.15s; }
+.mode-card:nth-child(4) { animation-delay: 0.20s; }
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* selection */
 ::selection { background: var(--brand-soft); color: var(--ink); }
 
-/* scrollbar warmth */
-::-webkit-scrollbar-thumb { background: rgba(239,68,68,0.15); }
-::-webkit-scrollbar-thumb:hover { background: rgba(239,68,68,0.3); }
+/* scrollbar */
+::-webkit-scrollbar-thumb { background: rgba(14,165,233,0.15); }
+::-webkit-scrollbar-thumb:hover { background: rgba(14,165,233,0.28); }
 
 /* ═══════════════════════════════════════════════
-   WIZARD — Kurulum Sihirbazı
+   WIZARD — Kurulum Sihirbazi
    ═══════════════════════════════════════════════ */
 .wizard-grid {
   display: grid;
@@ -1914,20 +1902,20 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   max-width: 780px;
 }
 .wizard-card {
-  background: linear-gradient(180deg, rgba(20,20,24,0.7), rgba(14,14,17,0.7));
-  border: 1px solid var(--hair);
-  border-radius: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.3s var(--ease);
+  transition: border-color 0.25s var(--ease);
 }
-.wizard-card.done { border-color: rgba(16,185,129,0.25); }
+.wizard-card.done { border-color: rgba(16,185,129,0.28); }
 .wizard-step-row {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 16px;
   align-items: center;
   padding: 18px 22px;
-  border-bottom: 1px solid var(--hair);
+  border-bottom: 1px solid var(--border);
 }
 .wizard-step-num {
   width: 32px; height: 32px;
@@ -1939,8 +1927,8 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   font-size: 13px;
   background: rgba(255,255,255,0.04);
   color: var(--text-mid);
-  border: 1px solid var(--hair);
-  transition: all 0.3s var(--ease);
+  border: 1px solid var(--border);
+  transition: all 0.25s var(--ease);
 }
 .wizard-step-num.done {
   background: var(--green);
@@ -1948,11 +1936,11 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   border-color: var(--green);
 }
 .wizard-step-title {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 17px;
+  font-weight: 700;
+  font-size: 15px;
   color: var(--ink);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
 }
 .wizard-step-desc {
   font-size: 12.5px;
@@ -1962,53 +1950,56 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 .wizard-step-status {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 100px;
   background: rgba(255,255,255,0.04);
   color: var(--text-dim);
-  border: 1px solid var(--hair);
+  border: 1px solid var(--border);
+  white-space: nowrap;
 }
 .wizard-step-status.ok {
   background: rgba(16,185,129,0.08);
   color: var(--green);
-  border-color: rgba(16,185,129,0.2);
+  border-color: rgba(16,185,129,0.22);
 }
 .wizard-step-status.pending {
-  background: rgba(245,158,11,0.06);
+  background: rgba(245,158,11,0.07);
   color: var(--amber);
-  border-color: rgba(245,158,11,0.18);
+  border-color: rgba(245,158,11,0.2);
 }
 .wizard-step-body {
-  padding: 18px 22px 22px;
+  padding: 20px 22px 22px;
 }
 .wizard-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 12.5px;
+  font-weight: 500;
   color: var(--text-mid);
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 .wizard-label a {
-  font-family: var(--font);
-  text-transform: none;
-  letter-spacing: 0;
+  font-size: 12px;
   color: var(--brand-warm);
   text-decoration: none;
-  font-size: 12px;
+  opacity: 0.8;
 }
-.wizard-label a:hover { color: var(--brand); }
+.wizard-label a:hover { opacity: 1; color: var(--brand); }
+.wizard-hint-link {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin-top: 5px;
+  line-height: 1.45;
+}
 .wizard-card input[type="text"],
 .wizard-card input[type="password"] {
   width: 100%;
-  padding: 11px 14px;
-  background: rgba(5,5,7,0.55);
-  border: 1px solid var(--hair);
+  padding: 10px 13px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--ink);
   font-family: var(--mono);
@@ -2029,36 +2020,36 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   display: flex;
   gap: 10px;
   align-items: center;
-  margin-top: 18px;
+  margin-top: 16px;
   flex-wrap: wrap;
 }
 .btn-wizard-primary {
-  background: linear-gradient(135deg, var(--brand), #dc2626);
+  background: linear-gradient(135deg, var(--brand), #0284c7);
   color: #fff;
   border: none;
-  padding: 10px 18px;
+  padding: 10px 20px;
   border-radius: 8px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 13px;
-  letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(239,68,68,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow: 0 4px 14px rgba(14,165,233,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
   transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 .btn-wizard-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(239,68,68,0.35);
+  box-shadow: 0 8px 22px rgba(14,165,233,0.32);
 }
 .btn-wizard-primary:disabled {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   color: var(--text-dim);
   box-shadow: none;
   cursor: not-allowed;
+  transform: none;
 }
 .btn-wizard-ghost {
-  background: rgba(255,255,255,0.04);
+  background: transparent;
   color: var(--text-mid);
-  border: 1px solid var(--hair);
+  border: 1px solid var(--border);
   padding: 9px 14px;
   border-radius: 8px;
   font-size: 12.5px;
@@ -2066,14 +2057,14 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   transition: all 0.2s var(--ease);
 }
 .btn-wizard-ghost:hover {
-  border-color: var(--hair-strong);
+  border-color: var(--border-hover);
   color: var(--ink);
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.04);
 }
 .wizard-saved {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--text-dim);
 }
 .wizard-saved.ok { color: var(--green); }
@@ -2086,36 +2077,35 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 .wizard-login-item {
   padding: 14px;
   border-radius: 10px;
-  background: rgba(5,5,7,0.4);
-  border: 1px solid var(--hair);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
 }
 .wizard-login-label {
-  font-family: var(--display);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink);
   margin-bottom: 4px;
 }
 .wizard-login-state {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--text-dim);
 }
 .wizard-login-state.ok { color: var(--green); }
 .wizard-login-state.pending { color: var(--amber); }
 .wizard-summary {
-  background: linear-gradient(180deg, rgba(24,24,28,0.6), rgba(14,14,17,0.6));
-  border: 1px solid var(--hair);
-  border-radius: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 22px;
 }
 .wizard-summary-head {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 16px;
   color: var(--ink);
   margin-bottom: 14px;
+  letter-spacing: -0.01em;
 }
 .wizard-summary-grid {
   display: grid;
@@ -2125,17 +2115,17 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 .summary-row {
   display: flex;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: rgba(5,5,7,0.35);
-  border: 1px solid var(--hair);
-  border-radius: 8px;
+  padding: 9px 13px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 7px;
   font-size: 13px;
 }
 .summary-row > span:first-child { color: var(--text-mid); }
 .summary-row > span:last-child {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .summary-row.ok > span:last-child { color: var(--green); }
@@ -2147,17 +2137,17 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   align-items: center; justify-content: center;
   min-width: 18px; height: 18px;
   margin-left: auto;
-  background: var(--brand);
+  background: var(--red);
   color: #fff;
   font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(239,68,68,0.5);
+  box-shadow: 0 0 8px rgba(239,68,68,0.5);
 }
 
 .wizard-hint {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text-dim);
   margin-top: 6px;
   line-height: 1.5;
@@ -2171,26 +2161,26 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 }
 .product-type-chip {
   padding: 10px 12px;
-  background: rgba(5,5,7,0.45);
-  border: 1px solid var(--hair);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
   border-radius: 9px;
   color: var(--text-mid);
   font-size: 13px;
   font-family: var(--font);
   cursor: pointer;
-  transition: all 0.25s var(--ease);
+  transition: all 0.2s var(--ease);
   text-align: left;
 }
 .product-type-chip:hover {
-  border-color: var(--hair-strong);
+  border-color: var(--border-hover);
   color: var(--ink);
   background: rgba(255,255,255,0.04);
 }
 .product-type-chip.active {
-  background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(251,146,60,0.06));
+  background: rgba(14,165,233,0.10);
   border-color: var(--brand-border);
   color: var(--ink);
-  box-shadow: 0 0 0 1px rgba(239,68,68,0.15), inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow: 0 0 0 1px rgba(14,165,233,0.12);
 }
 .product-type-chip {
   display: flex;
@@ -2218,8 +2208,8 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 .niche-grid textarea {
   width: 100%;
   padding: 10px 12px;
-  background: rgba(5,5,7,0.55);
-  border: 1px solid var(--hair);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--ink);
   font-family: var(--font);
@@ -2324,8 +2314,24 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   animation: cdpPulse 1.8s ease-in-out infinite;
 }
 @keyframes cdpPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); }
   50%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+}
+
+/* ── Screen header helper ── */
+.screen-header { margin-bottom: 2rem; }
+.screen-title {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.screen-subtitle {
+  font-size: 14px;
+  color: var(--text-mid);
+  max-width: 60ch;
+  line-height: 1.55;
 }
 
 </style>
@@ -2338,9 +2344,9 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5" opacity="0.5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="2" x2="12" y2="22" opacity="0.5"/><line x1="2" y1="8.5" x2="22" y2="8.5" opacity="0.4"/></svg>
     </div>
-    <span class="sidebar-brand" data-brand-name>Etsy Creator</span>
+    <span class="sidebar-brand" data-brand-name>Cam Tablo</span>
   </div>
 
   <nav class="sidebar-nav">
@@ -2375,10 +2381,10 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   </nav>
 
   <div class="sidebar-footer">
-    <button class="sidebar-cdp" id="btnCdp" onclick="toggleCdp()" title="Tarayici bağlantısi (CDP)">
+    <button class="sidebar-cdp" id="btnCdp" onclick="toggleCdp()" title="Tikla: Tarayici baslat veya baglanti durumunu kontrol et">
       <span class="cdp-dot" id="cdpDot" style="background:var(--red)"></span>
-      <span class="cdp-label">CDP Bağlantısı</span>
-      <span class="cdp-status">9333</span>
+      <span class="cdp-label">Tarayici</span>
+      <span class="cdp-status" id="cdpPortLabel">:9333</span>
     </button>
   </div>
 </aside>
@@ -2403,8 +2409,8 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
     <!-- ═══ SCREEN 1: Dashboard ═══ -->
     <div id="screen-select" class="screen active">
       <div class="section-header">
-        <h2>Kontrol Paneli</h2>
-        <p>Oluşturmak istediğiniz ürün modunu seçin</p>
+        <h2>Urun Olustur</h2>
+        <p>Kacinci adimdan baslamak istediginizi secin. Her adim Etsy'ye yayina hazir gorsel uretir ve yukler.</p>
       </div>
 
       <div class="mode-grid">
@@ -2542,15 +2548,17 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
         </div>
         <div class="wizard-step-body">
           <label class="wizard-label">
-            <span>WIRO API Key</span>
-            <a href="https://wiro.ai/" target="_blank" rel="noopener">wiro.ai →</a>
+            <span>WIRO API Anahtari</span>
+            <a href="https://wiro.ai/" target="_blank" rel="noopener">wiro.ai'dan al →</a>
           </label>
           <input type="password" id="wizWiroKey" placeholder="wiro_..." autocomplete="off" spellcheck="false">
-          <label class="wizard-label" style="margin-top:14px;">
-            <span>OpenRouter API Key</span>
-            <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai →</a>
+          <div class="wizard-hint">wiro.ai → kayit ol → API Keys → Create Key. Goruntu uretimi icin kullanilir.</div>
+          <label class="wizard-label" style="margin-top:16px;">
+            <span>OpenRouter API Anahtari</span>
+            <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai'dan al →</a>
           </label>
           <input type="password" id="wizOpenrouterKey" placeholder="sk-or-..." autocomplete="off" spellcheck="false">
+          <div class="wizard-hint">openrouter.ai → Keys → Create Key. SEO baslik ve etiket uretimi icin kullanilir. Ucretsiz krediler mevcuttur.</div>
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="saveWizardKeys()">Kaydet</button>
             <span class="wizard-saved" id="wizSavedMsg"></span>
@@ -2569,16 +2577,20 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
           <span class="wizard-step-status" id="wizStatusChrome">bekliyor</span>
         </div>
         <div class="wizard-step-body">
-          <label class="wizard-label"><span>Chrome / Edge / Brave yolu</span></label>
+          <label class="wizard-label"><span>Tarayici Dosya Yolu</span></label>
           <div class="wizard-row">
-            <input type="text" id="wizChromePath" placeholder="/Applications/Google Chrome.app/..." spellcheck="false">
-            <button class="btn-wizard-ghost" onclick="detectChrome()">Otomatik Algıla</button>
+            <input type="text" id="wizChromePath" placeholder="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" spellcheck="false">
+            <button class="btn-wizard-ghost" onclick="detectChrome()">Otomatik Bul</button>
           </div>
-          <label class="wizard-label" style="margin-top:14px;"><span>CDP Port</span></label>
-          <input type="text" id="wizCdpPort" placeholder="9334" style="max-width:120px;">
+          <div class="wizard-hint">Chrome, Edge, Brave veya Opera GX desteklenir. "Otomatik Bul" genellikle dogru yolu bulur.</div>
+          <label class="wizard-label" style="margin-top:16px;">
+            <span>Tarayici Hata Ayiklama Portu</span>
+          </label>
+          <input type="text" id="wizCdpPort" placeholder="9333" style="max-width:130px;">
+          <div class="wizard-hint">Varsayilan 9333. Baska bir program bu portu kullaniyorsa degistir.</div>
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="saveWizardChrome()">Kaydet</button>
-            <button class="btn-wizard-ghost" onclick="launchCdpFromWizard()">Chrome'u Aç</button>
+            <button class="btn-wizard-ghost" onclick="launchCdpFromWizard()">Tarayiciyi Ac</button>
             <span class="wizard-saved" id="wizChromeMsg"></span>
           </div>
         </div>
@@ -2596,11 +2608,11 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
         </div>
         <div class="wizard-step-body">
           <label class="wizard-label">
-            <span>Etsy Şablon Listing ID</span>
-            <a href="https://www.etsy.com/your/shops/me/tools/listings" target="_blank" rel="noopener">listings →</a>
+            <span>Etsy Sablon Urun ID'si</span>
+            <a href="https://www.etsy.com/your/shops/me/tools/listings" target="_blank" rel="noopener">Etsy Listings'e Git →</a>
           </label>
-          <input type="text" id="wizTemplateId" placeholder="ornek: 1234567890" inputmode="numeric" spellcheck="false">
-          <div class="wizard-hint">Etsy → Listings → bir şablonu aç → URL'deki sayı (ör. /listing/<b>1234567890</b>).</div>
+          <input type="text" id="wizTemplateId" placeholder="Ornek: 1234567890" inputmode="numeric" spellcheck="false">
+          <div class="wizard-hint">Yeni urunler bu sablondan kopyalanir. <b>Nasil bulunur:</b> Etsy → Listings → kopyalanacak urunu ac → tarayici URL'sindeki sayi: /listing/<b>1234567890</b>/...</div>
 
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="saveWizardEtsy()">Kaydet</button>
@@ -2621,12 +2633,14 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
           <span class="wizard-step-status" id="wizStatusAlura">bekliyor</span>
         </div>
         <div class="wizard-step-body">
-          <div class="wizard-hint" style="margin-bottom:0.6rem;">
-            <b>Adimlar:</b><br>
-            1. Once <b>CDP browser'i baglat</b> (sidebar > Browser Bagla).<br>
-            2. Asagidaki butona bas → CDP browser'da Chrome Web Store'da Alura sayfasi acilir.<br>
-            3. <b>"Add to Chrome"</b> tikla, eklentiyi yukle.<br>
-            4. Yuklendikten sonra alttaki <b>"Yuklendi"</b> butonuna bas.
+          <div class="wizard-hint" style="margin-bottom:1rem;">
+            Etsy listinglerden SEO etiketi cekmek icin kullanilir. <b>Kurulum adimlari:</b><br><br>
+            1. Asagidaki "Tarayicida Ac" butonuna bas — Chrome Web Store'da Alura sayfasi acilir.<br>
+            2. Sayfada <b>"Add to Chrome"</b> butonuna tikla ve eklentiyi yukle.<br>
+            3. Yukledikten sonra asagidaki <b>"Yuklendi olarak isaretle"</b> butonuna bas.
+          </div>
+          <div class="wizard-hint" style="margin-bottom:0.75rem; color: var(--amber);">
+            Not: "Tarayicida Ac" calismiyorsa once sol alttaki <b>CDP baglan</b> butonuna basin.
           </div>
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="openAluraInBrowser()">Tarayicida Ac</button>
@@ -2638,9 +2652,9 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 
       <!-- Summary -->
       <div class="wizard-summary" id="wizSummary">
-        <div class="wizard-summary-head">Sistem Durumu</div>
+        <div class="wizard-summary-head">Sistem Ozeti</div>
         <div class="wizard-summary-grid" id="wizSummaryGrid"></div>
-        <button class="btn-wizard-primary wizard-summary-cta" id="wizStartBtn" onclick="goDashboard()" disabled>Dashboard'a Git</button>
+        <button class="btn-wizard-primary wizard-summary-cta" id="wizStartBtn" onclick="goDashboard()" disabled>Dashboard'a Gecis Yap</button>
       </div>
     </div>
   </div>
@@ -2649,69 +2663,81 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
   <div id="settingsScreen" class="screen" style="display:none;">
     <div class="screen-header">
       <h2 class="screen-title">Ayarlar</h2>
-      <p class="screen-subtitle">Bağlantı ayarlarınızı yapılandırın. AI işlemleri sunucu tarafından karşılanır — ek API key gerekmez.</p>
+      <p class="screen-subtitle">Baglanti ayarlarinizi yapilandirin. Detayli kurulum icin Kurulum Sihirbazi'ni kullanin.</p>
     </div>
     <div class="settings-grid">
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span>CDP Tarayıcı Ayarları</span>
+          <div class="settings-card-icon" style="background:var(--accent-dim);color:var(--accent-light);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div>
+            <div class="settings-card-title">Tarayici (CDP)</div>
+            <div class="settings-card-desc">Chrome DevTools Protocol — Etsy/Pinterest otomasyonu icin gerekli</div>
+          </div>
         </div>
         <div class="settings-field">
-          <label>CDP Port</label>
+          <label>Hata Ayiklama Portu</label>
           <input type="number" id="settingsCdpPort" value="9333" min="1000" max="65535">
-          <small class="text-dim">Chrome DevTools Protocol port numarasi (varsayilan: 9333)</small>
+          <div class="field-hint">Varsayilan: 9333. Cakisma varsa degistir.</div>
         </div>
         <div class="settings-field">
-          <label>Tarayici Yolu (opsiyonel)</label>
-          <input type="text" id="settingsBrowserPath" placeholder="C:/Users/.../opera.exe">
-          <small class="text-dim">Opera GX, Chrome veya Chromium tarayici yolu</small>
+          <label>Tarayici Dosya Yolu <span style="opacity:0.5;font-weight:400;">(opsiyonel)</span></label>
+          <input type="text" id="settingsBrowserPath" placeholder="/Applications/Google Chrome.app/... veya C:/Users/.../chrome.exe">
+          <div class="field-hint">Bos birakilirsa otomatik algilama kullanilir.</div>
         </div>
       </div>
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Etsy Hesabi</span>
-          <span id="etsyStatus" style="margin-left:auto;font-size:0.65rem;padding:2px 8px;border-radius:9px;background:var(--red);background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2)">Bagli Degil</span>
+          <div class="settings-card-icon" style="background:rgba(245,158,11,0.10);color:var(--amber);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <div>
+            <div class="settings-card-title">Etsy Hesabi</div>
+            <div class="settings-card-desc">CDP tarayici uzerinden otomatik giris icin cookie</div>
+          </div>
+          <span id="etsyStatus" style="margin-left:auto;font-size:0.65rem;padding:2px 10px;border-radius:9px;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.18);white-space:nowrap;flex-shrink:0;">Bagli Degil</span>
         </div>
         <div class="settings-field">
-          <label>Etsy Cookie'leri</label>
+          <label>Etsy Cookie Verisi</label>
           <textarea id="settingsEtsyCookies" placeholder='Etsy.com cookie JSON...' rows="3" style="width:100%;padding:0.5rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--mono);font-size:0.65rem;resize:vertical"></textarea>
-          <small class="text-dim">
-            Nasil alinir: 1) etsy.com'a giris yapin 2) F12 > Console 3) Asagidaki kodu yapistirin:
-          </small>
-          <div style="margin-top:0.35rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.4rem 0.6rem;font-family:var(--mono);font-size:0.6rem;color:var(--accent-light);cursor:pointer;word-break:break-all" onclick="navigator.clipboard.writeText(this.textContent);this.style.color='var(--green)';setTimeout(()=>this.style.color='var(--accent-light)',1500)">
+          <div class="field-hint">
+            <b>Nasil alinir:</b> etsy.com'a giris yap → F12 → Console → asagidaki kodu yapistir → sonucu buraya yapistir:
+          </div>
+          <div style="margin-top:0.4rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.45rem 0.65rem;font-family:var(--mono);font-size:0.6rem;color:var(--accent-light);cursor:pointer;word-break:break-all;transition:color 0.2s;" onclick="navigator.clipboard.writeText(this.textContent);this.style.color='var(--green)';setTimeout(()=>this.style.color='var(--accent-light)',1500)" title="Tikla kopyala">
             copy(JSON.stringify(document.cookie.split(';').map(c=>{let[n,...v]=c.trim().split('=');return{name:n,value:v.join('='),domain:'.etsy.com'}})))
           </div>
-          <small class="text-dim" style="margin-top:0.2rem;display:block">Tıkla kopyala, Etsy console'a yapistir, sonra sonucu buraya yapistir</small>
         </div>
-        <button class="btn-sm" style="margin-top:0.5rem" onclick="saveEtsyCookies()">Etsy Bagla</button>
+        <button class="btn-sm" style="margin-top:0.5rem" onclick="saveEtsyCookies()">Etsy Hesabi Bagla</button>
       </div>
 
       <div class="settings-card">
         <div class="settings-card-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-          <span>Pinterest Hesabi</span>
-          <span id="pinterestStatus" style="margin-left:auto;font-size:0.65rem;padding:2px 8px;border-radius:9px;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2)">Bagli Degil</span>
+          <div class="settings-card-icon" style="background:rgba(239,68,68,0.10);color:#fb7185;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div>
+            <div class="settings-card-title">Pinterest Hesabi</div>
+            <div class="settings-card-desc">Otomatik pin icin cookie verisi</div>
+          </div>
+          <span id="pinterestStatus" style="margin-left:auto;font-size:0.65rem;padding:2px 10px;border-radius:9px;background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.18);white-space:nowrap;flex-shrink:0;">Bagli Degil</span>
         </div>
         <div class="settings-field">
-          <label>Pinterest Cookie'leri</label>
+          <label>Pinterest Cookie Verisi</label>
           <textarea id="settingsPinCookies" placeholder='Pinterest.com cookie JSON...' rows="3" style="width:100%;padding:0.5rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--mono);font-size:0.65rem;resize:vertical"></textarea>
-          <small class="text-dim">
-            Nasil alinir: 1) pinterest.com'a giris yapin 2) F12 > Console 3) Ayni kodu yapistirin (domain'i .pinterest.com yapin)
-          </small>
-          <div style="margin-top:0.35rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.4rem 0.6rem;font-family:var(--mono);font-size:0.6rem;color:var(--accent-light);cursor:pointer;word-break:break-all" onclick="navigator.clipboard.writeText(this.textContent);this.style.color='var(--green)';setTimeout(()=>this.style.color='var(--accent-light)',1500)">
+          <div class="field-hint">Ayni kod, sadece domain'i <code style="font-family:var(--mono);background:var(--bg-input);padding:1px 4px;border-radius:3px;">.pinterest.com</code> olarak degistir.</div>
+          <div style="margin-top:0.4rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.45rem 0.65rem;font-family:var(--mono);font-size:0.6rem;color:var(--accent-light);cursor:pointer;word-break:break-all;transition:color 0.2s;" onclick="navigator.clipboard.writeText(this.textContent);this.style.color='var(--green)';setTimeout(()=>this.style.color='var(--accent-light)',1500)" title="Tikla kopyala">
             copy(JSON.stringify(document.cookie.split(';').map(c=>{let[n,...v]=c.trim().split('=');return{name:n,value:v.join('='),domain:'.pinterest.com'}})))
           </div>
         </div>
-        <button class="btn-sm" style="margin-top:0.5rem" onclick="savePinterestCookies()">Pinterest Bagla</button>
+        <button class="btn-sm" style="margin-top:0.5rem" onclick="savePinterestCookies()">Pinterest Hesabi Bagla</button>
       </div>
 
     </div>
     <div style="margin-top:1.25rem;display:flex;gap:0.75rem;align-items:center;">
-      <button class="btn-save-settings" onclick="saveSettings()">Kaydet</button>
+      <button class="btn-save-settings" onclick="saveSettings()">Ayarlari Kaydet</button>
       <span id="settingsStatus" class="settings-status"></span>
     </div>
   </div>
