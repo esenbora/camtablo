@@ -2235,6 +2235,99 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
 }
 
 
+/* ═══════════════════════════════════════════════
+   STATUS BANNER
+   ═══════════════════════════════════════════════ */
+#statusBanner {
+  display: none;
+  margin: 0;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  line-height: 1.4;
+  animation: bannerIn 0.25s var(--ease);
+}
+@keyframes bannerIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#statusBanner.banner-ready {
+  background: rgba(16,185,129,0.08);
+  border-color: rgba(16,185,129,0.18);
+  color: var(--green);
+}
+#statusBanner.banner-warn {
+  background: rgba(239,68,68,0.07);
+  border-color: rgba(239,68,68,0.18);
+  color: #f87171;
+}
+.banner-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+.banner-title {
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.banner-issues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.banner-issue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-pill);
+  padding: 2px 10px 2px 8px;
+  font-size: 0.72rem;
+  color: var(--text-mid);
+}
+.banner-issue-btn {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: var(--radius-pill);
+  color: var(--accent-light);
+  padding: 1px 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.banner-issue-btn:hover {
+  background: rgba(99,102,241,0.28);
+}
+.banner-dismiss {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+.banner-dismiss:hover { opacity: 1; }
+
+/* CDP pulse when disconnected */
+#btnCdp.cdp-disconnected .cdp-dot {
+  animation: cdpPulse 1.8s ease-in-out infinite;
+}
+@keyframes cdpPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+}
+
 </style>
 </head>
 <body>
@@ -2301,6 +2394,9 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
     <div class="toolbar-spacer"></div>
     <div class="toolbar-status" id="toolbarStatus">Ready</div>
   </header>
+
+  <!-- STATUS BANNER — injected by JS on load -->
+  <div id="statusBanner" role="alert" aria-live="polite"></div>
 
   <div class="app">
 
@@ -6250,6 +6346,175 @@ window.updateSidebar = function(mode) {
 
   // Render on page load
   renderDashboardPending();
+
+  // ─────────────────────────────────────────────
+  // STATUS BANNER
+  // ─────────────────────────────────────────────
+  async function refreshStatusBanner() {
+    const banner = document.getElementById('statusBanner');
+    if (!banner) return;
+
+    let data;
+    try {
+      const r = await fetch('/api/setup/status');
+      data = await r.json();
+    } catch (e) {
+      return; // server not ready yet, skip silently
+    }
+
+    const c = data.checks || {};
+
+    // Update CDP button pulse
+    const btnCdp = document.getElementById('btnCdp');
+    if (btnCdp) {
+      if (c.cdpRunning) {
+        btnCdp.classList.remove('cdp-disconnected');
+        btnCdp.title = 'Tarayici CDP ile bagli';
+      } else {
+        btnCdp.classList.add('cdp-disconnected');
+        btnCdp.title = 'Tarayici bagli degil — Etsy/Pinterest yayini icin zorunlu. Tikla bagla.';
+      }
+    }
+
+    if (data.ready) {
+      banner.className = 'banner-ready';
+      banner.style.display = 'block';
+      banner.innerHTML = `<div class="banner-row">
+        <span class="banner-title">Sistem hazir</span>
+        <span style="color:var(--text-mid);font-size:0.72rem">Yayina hazir, tasarım üretmeye baslayabilirsin.</span>
+        <button class="banner-dismiss" onclick="this.parentElement.parentElement.style.display='none'" title="Kapat">×</button>
+      </div>`;
+      return;
+    }
+
+    // Build issues list
+    const issues = [];
+
+    if (!c.openrouterKey) {
+      issues.push({
+        label: 'OpenRouter API Key eksik',
+        btnText: 'Ayarlardan Gir',
+        action: "showSettingsScreen();updateSidebar('settings')"
+      });
+    }
+    if (!c.chromePath) {
+      issues.push({
+        label: 'Chrome bulunamadi',
+        btnText: 'Ayarlara Git',
+        action: "showWizardScreen();updateSidebar('wizard')"
+      });
+    }
+    if (!c.cdpRunning) {
+      issues.push({
+        label: 'Tarayici bagli degil',
+        btnText: 'Simdi Bagla',
+        action: "toggleCdp()"
+      });
+    }
+    if (!c.etsyLoggedIn) {
+      issues.push({
+        label: 'Etsy oturumu yok',
+        btnText: 'Etsy.com\'a Gir',
+        action: "window.open('https://www.etsy.com/signin','_blank')"
+      });
+    }
+    if (!c.pinterestLoggedIn) {
+      issues.push({
+        label: 'Pinterest oturumu yok',
+        btnText: 'Pinterest\'e Gir',
+        action: "window.open('https://www.pinterest.com/login','_blank')"
+      });
+    }
+    if (!c.etsyTemplateId) {
+      issues.push({
+        label: 'Etsy sablon ID eksik',
+        btnText: 'Sablon Ekle',
+        action: "showWizardScreen();updateSidebar('wizard')"
+      });
+    }
+
+    if (issues.length === 0) return; // nothing to show
+
+    const issueHtml = issues.map(i => `
+      <span class="banner-issue">
+        ${i.label}
+        <button class="banner-issue-btn" onclick="${i.action}">${i.btnText}</button>
+      </span>
+    `).join('');
+
+    banner.className = 'banner-warn';
+    banner.style.display = 'block';
+    banner.innerHTML = `<div class="banner-row">
+      <span class="banner-title">Sistem hazir degil</span>
+      <div class="banner-issues">${issueHtml}</div>
+      <button class="banner-dismiss" onclick="this.parentElement.parentElement.style.display='none'" title="Kapat">×</button>
+    </div>`;
+  }
+
+  // ─────────────────────────────────────────────
+  // EMPTY STATE GUIDE (shown when no pending items)
+  // ─────────────────────────────────────────────
+  function renderEmptyStateGuide(checks) {
+    const pending = document.getElementById('dashboard-pending');
+    if (!pending) return;
+    // Only show guide if pending area is empty
+    if (pending.style.display !== 'none' && pending.innerHTML.trim() !== '') return;
+
+    const c = checks || {};
+    if (c.cdpRunning && c.etsyLoggedIn) return; // already ready, no need for guide
+
+    pending.style.display = 'block';
+    pending.innerHTML = `
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;max-width:520px;">
+        <div style="font-size:0.75rem;font-weight:600;color:var(--text-mid);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.9rem">Ilk Adimlar</div>
+        <div style="display:flex;flex-direction:column;gap:0.65rem;">
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:${c.cdpRunning?'var(--green)':'var(--red)'};display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;flex-shrink:0">${c.cdpRunning?'✓':'1'}</span>
+            <div>
+              <div style="font-size:0.8rem;font-weight:600;color:var(--text-bright)">Tarayiciyi baglayın</div>
+              <div style="font-size:0.72rem;color:var(--text-mid);margin-top:1px">Etsy ve Pinterest yayini icin zorunlu.</div>
+              ${!c.cdpRunning ? `<button onclick="toggleCdp()" style="margin-top:6px;padding:3px 12px;font-size:0.7rem;font-weight:600;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);border-radius:var(--radius-pill);color:var(--accent-light);cursor:pointer;">Tarayiciyi Bagla</button>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:${c.etsyLoggedIn&&c.pinterestLoggedIn?'var(--green)':'var(--border)'};display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;flex-shrink:0">${c.etsyLoggedIn&&c.pinterestLoggedIn?'✓':'2'}</span>
+            <div>
+              <div style="font-size:0.8rem;font-weight:600;color:var(--text-bright)">Etsy ve Pinterest'e giris yapin</div>
+              <div style="font-size:0.72rem;color:var(--text-mid);margin-top:1px">Acilan tarayicida etsy.com ve pinterest.com'a giris yapin.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+            <span style="min-width:22px;height:22px;border-radius:50%;background:var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;flex-shrink:0">3</span>
+            <div>
+              <div style="font-size:0.8rem;font-weight:600;color:var(--text-bright)">Geri gelin ve tasarim üretin</div>
+              <div style="font-size:0.72rem;color:var(--text-mid);margin-top:1px">Yukaridan modu secin, ürün fotografini yukleyin ve baslatin.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Override toggleCdp to also re-check banner
+  const _origToggleCdp = window.toggleCdp;
+  window.toggleCdp = async function() {
+    await _origToggleCdp();
+    setTimeout(refreshStatusBanner, 6000);
+  };
+
+  // Initial load
+  (async function initStatusBanner() {
+    await refreshStatusBanner();
+    // Also render empty state guide using the same fetch result
+    try {
+      const r = await fetch('/api/setup/status');
+      const d = await r.json();
+      renderEmptyStateGuide(d.checks);
+    } catch (_) {}
+  })();
+
+  // Refresh banner every 60s
+  setInterval(refreshStatusBanner, 60000);
 
 })();
 </script>
