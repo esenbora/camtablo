@@ -1,0 +1,20 @@
+{
+  "mockup": {
+    "x": 280,
+    "y": 350,
+    "width": 400,
+    "height": 500
+  },
+  "keepPhotoIndexes": [],
+  "keepPhotoCount": 6,
+  "operaPath": "C:/path/to/your/browser.exe",
+  "cdpPort": 9333,
+  "userDataDir": "",
+  "niche": "cam-tablo",
+  "brand": {
+    "name": "Cam Tablo Creator",
+    "primary": "#0ea5e9",
+    "accent": "#8b5cf6",
+    "logoUrl": ""
+  }
+}
