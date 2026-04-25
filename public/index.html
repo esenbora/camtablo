@@ -2752,7 +2752,7 @@ window.updateSidebar = function(mode) {
         <div class="summary-row ${c.openrouterKey?'ok':'miss'}"><span>OpenRouter API Key</span><span>${c.openrouterKey?'hazır':'eksik'}</span></div>
         <div class="summary-row ${c.chromePath?'ok':'miss'}"><span>Chrome yolu</span><span>${c.chromePath?'bulundu':'eksik'}</span></div>
         <div class="summary-row ${c.etsyTemplateId?'ok':'miss'}"><span>Etsy şablon ID</span><span>${c.etsyTemplateId?'hazır':'eksik'}</span></div>
-        <div class="summary-row ${c.cdpRunning?'ok':'pending'}"><span>CDP Chrome açık</span><span>${c.cdpRunning?'çalışıyor':'kapalı (isteğe bağlı)'}</span></div>
+        <div class="summary-row ${c.cdpRunning?'ok':'miss'}"><span>CDP Chrome bağlı</span><span>${c.cdpRunning?'bağlı (port '+c.cdpPort+')':'BAĞLI DEĞİL — Etsy/Pinterest yayını için gerekli'}</span></div>
         <div class="summary-row ${c.etsyLoggedIn?'ok':'pending'}"><span>Etsy oturumu</span><span>${c.etsyLoggedIn?'var':'yok'}</span></div>
         <div class="summary-row ${c.pinterestLoggedIn?'ok':'pending'}"><span>Pinterest oturumu</span><span>${c.pinterestLoggedIn?'var':'yok'}</span></div>
       `;

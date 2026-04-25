@@ -236,13 +236,27 @@ if ($envHasPlaceholder) {
 @"
 @echo off
 cd /d "%~dp0"
-npm run browser
+title Cam Tablo - Browser
+echo === Browser baslatiliyor (CDP modunda) ===
+echo.
+call npm run browser
+echo.
+echo --- Cikti yukarida ---
+echo Hata varsa screenshot al, destege gonder.
+pause
 "@ | Set-Content -Encoding ASCII "start-browser.bat"
 
 @"
 @echo off
 cd /d "%~dp0"
-npm start
+title Cam Tablo - Server
+echo === Server baslatiliyor ===
+echo Tarayici: http://localhost:3000
+echo.
+call npm start
+echo.
+echo --- Server kapandi ---
+pause
 "@ | Set-Content -Encoding ASCII "start.bat"
 
 # 11. Desktop shortcut (opsiyonel)
