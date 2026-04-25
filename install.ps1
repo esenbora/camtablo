@@ -4,6 +4,10 @@
 
 $ErrorActionPreference = "Stop"
 
+# ExecutionPolicy: npm/.ps1 wrapper'lari icin RemoteSigned kalici, Bypass mevcut process
+try { Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force } catch {}
+try { Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force } catch {}
+
 $REPO_URL = "https://github.com/esenbora/camtablo.git"
 $TARGET = if ($env:TARGET) { $env:TARGET } else { Join-Path $HOME "camtablo" }
 
@@ -27,18 +31,70 @@ function Install-ViaWinget {
     Refresh-Path
 }
 
-# 1. Winget kontrol
-if (-not (Test-Command "winget")) {
-    Write-Host "HATA: winget yok. Windows 10 1809+ veya Windows 11 gerekli." -ForegroundColor Red
-    Write-Host "App Installer'i Microsoft Store'dan kur: https://www.microsoft.com/store/productId/9NBLGGH4NNS1"
-    exit 1
+function Download-File {
+    param([string]$Url, [string]$Out)
+    $sec = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+    [Net.ServicePointManager]::SecurityProtocol = $sec
+    Invoke-WebRequest -Uri $Url -OutFile $Out -UseBasicParsing
+}
+
+function Install-GitDirect {
+    Write-Host ">> Git direkt indiriliyor (winget yok)..." -ForegroundColor Yellow
+    $api = Invoke-RestMethod -Uri "https://api.github.com/repos/git-for-windows/git/releases/latest" -UseBasicParsing
+    $asset = $api.assets | Where-Object { $_.name -match "Git-.*-64-bit\.exe$" } | Select-Object -First 1
+    if (-not $asset) { throw "Git installer bulunamadi" }
+    $tmp = Join-Path $env:TEMP $asset.name
+    Download-File -Url $asset.browser_download_url -Out $tmp
+    Write-Host "   Git installer indirildi, sessizce kuruluyor..."
+    Start-Process -FilePath $tmp -ArgumentList "/VERYSILENT","/NORESTART","/NOCANCEL","/SP-","/CLOSEAPPLICATIONS","/RESTARTAPPLICATIONS" -Wait
+    Refresh-Path
+    if (-not (Test-Command "git")) {
+        $gitBin = "$env:ProgramFiles\Git\cmd"
+        if (Test-Path $gitBin) { $env:Path = "$gitBin;$env:Path" }
+    }
+}
+
+function Install-NodeDirect {
+    Write-Host ">> Node.js LTS direkt indiriliyor (winget yok)..." -ForegroundColor Yellow
+    $idx = Invoke-RestMethod -Uri "https://nodejs.org/dist/index.json" -UseBasicParsing
+    $lts = $idx | Where-Object { $_.lts } | Select-Object -First 1
+    $ver = $lts.version
+    $msi = "https://nodejs.org/dist/$ver/node-$ver-x64.msi"
+    $tmp = Join-Path $env:TEMP "node-$ver.msi"
+    Download-File -Url $msi -Out $tmp
+    Write-Host "   Node $ver indirildi, sessizce kuruluyor..."
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/i","`"$tmp`"","/quiet","/norestart","ADDLOCAL=ALL" -Wait
+    Refresh-Path
+    if (-not (Test-Command "node")) {
+        $nodeBin = "$env:ProgramFiles\nodejs"
+        if (Test-Path $nodeBin) { $env:Path = "$nodeBin;$env:Path" }
+    }
+}
+
+function Install-ChromeDirect {
+    Write-Host ">> Chrome direkt indiriliyor (winget yok)..." -ForegroundColor Yellow
+    $url = "https://dl.google.com/chrome/install/standalonesetup64.exe"
+    $tmp = Join-Path $env:TEMP "chrome_setup.exe"
+    Download-File -Url $url -Out $tmp
+    Write-Host "   Chrome installer indirildi, sessizce kuruluyor..."
+    Start-Process -FilePath $tmp -ArgumentList "/silent","/install" -Wait
+}
+
+$hasWinget = Test-Command "winget"
+if (-not $hasWinget) {
+    Write-Host "   winget yok, direkt indirme moduna gecildi." -ForegroundColor Yellow
 }
 
 # 2. Git
 if (-not (Test-Command "git")) {
-    Install-ViaWinget -Id "Git.Git" -Name "Git"
+    if ($hasWinget) {
+        Install-ViaWinget -Id "Git.Git" -Name "Git"
+        if (-not (Test-Command "git")) { Install-GitDirect }
+    } else {
+        Install-GitDirect
+    }
     if (-not (Test-Command "git")) {
-        Write-Host "Git kuruldu ama PATH'te yok. PowerShell'i kapatip tekrar ac, scripti yeniden calistir." -ForegroundColor Red
+        Write-Host "Git kurulamadi. PowerShell'i kapatip tekrar ac, scripti yeniden calistir." -ForegroundColor Red
         exit 1
     }
 }
@@ -53,9 +109,14 @@ if (-not (Test-Command "node")) {
     if ($major -lt 18) { $installNode = $true }
 }
 if ($installNode) {
-    Install-ViaWinget -Id "OpenJS.NodeJS.LTS" -Name "Node.js LTS"
+    if ($hasWinget) {
+        Install-ViaWinget -Id "OpenJS.NodeJS.LTS" -Name "Node.js LTS"
+        if (-not (Test-Command "node")) { Install-NodeDirect }
+    } else {
+        Install-NodeDirect
+    }
     if (-not (Test-Command "node")) {
-        Write-Host "Node kuruldu ama PATH'te yok. PowerShell'i kapatip tekrar ac." -ForegroundColor Red
+        Write-Host "Node kurulamadi. PowerShell'i kapatip tekrar ac." -ForegroundColor Red
         exit 1
     }
 }
@@ -70,8 +131,14 @@ $chromePaths = @(
 $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
 
 if (-not $chromePath) {
-    Install-ViaWinget -Id "Google.Chrome" -Name "Google Chrome"
-    $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if ($hasWinget) {
+        Install-ViaWinget -Id "Google.Chrome" -Name "Google Chrome"
+        $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+        if (-not $chromePath) { Install-ChromeDirect; $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1 }
+    } else {
+        Install-ChromeDirect
+        $chromePath = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+    }
 }
 if ($chromePath) {
     Write-Host "   chrome: $chromePath"
