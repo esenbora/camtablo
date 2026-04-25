@@ -1224,6 +1224,7 @@ app.get('/api/setup/status', async (req, res) => {
       pinterestLoggedIn: pinLogged,
       etsyTemplateId: templateIdOk,
       etsyTemplateIdValue: cfg.etsyTemplateListingId || '',
+      aluraInstalled: !!cfg.aluraInstalled,
       port: process.env.PORT || 3000,
       activeProductType: cfg.activeProductType || 'tshirt',
     },
@@ -1243,7 +1244,7 @@ function mask(v) {
 
 app.post('/api/setup/save', (req, res) => {
   try {
-    const { wiroKey, openrouterKey, chromePath, cdpPort, port } = req.body || {};
+    const { wiroKey, openrouterKey, chromePath, cdpPort, port, aluraInstalled } = req.body || {};
     const updates = {};
     if (typeof wiroKey === 'string' && wiroKey.trim() && !wiroKey.includes('••••')) {
       updates.WIRO_API_KEY = wiroKey.trim();
@@ -1257,7 +1258,7 @@ app.post('/api/setup/save', (req, res) => {
     if (Object.keys(updates).length) writeEnvFile(updates);
 
     const { etsyTemplateListingId, productType } = req.body || {};
-    const cfgTouch = chromePath || cdpPort || etsyTemplateListingId || productType;
+    const cfgTouch = chromePath || cdpPort || etsyTemplateListingId || productType || typeof aluraInstalled === 'boolean';
     if (cfgTouch) {
       let cfg = {};
       try { cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8')); } catch {}
@@ -1273,9 +1274,31 @@ app.post('/api/setup/save', (req, res) => {
         const preset = { ...DEFAULT_PRODUCT_TYPES, ...(cfg.productTypes || {}) }[cfg.activeProductType];
         if (preset && preset.position) cfg.mockup = { ...preset.position };
       }
+      if (typeof aluraInstalled === 'boolean') cfg.aluraInstalled = aluraInstalled;
       fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
     }
     res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Alura Chrome extension Web Store sayfasini CDP browser'da ac
+const ALURA_CWS_URL = 'https://chromewebstore.google.com/detail/alura-everbee-discover-be/eaeegigncgcnhmpbabcoaomidhdofpah';
+app.post('/api/alura-open', async (req, res) => {
+  try {
+    const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+    const port = cfg.cdpPort || 9333;
+    const verResp = await fetch(`http://localhost:${port}/json/version`).catch(() => null);
+    if (!verResp || !verResp.ok) {
+      return res.status(400).json({ error: 'CDP browser bagli degil. Once browseri baglat.' });
+    }
+    const newTabResp = await fetch(`http://localhost:${port}/json/new?${encodeURIComponent(ALURA_CWS_URL)}`, { method: 'PUT' });
+    if (!newTabResp.ok) {
+      const fallback = await fetch(`http://localhost:${port}/json/new?${encodeURIComponent(ALURA_CWS_URL)}`);
+      if (!fallback.ok) throw new Error('Tab acilamadi');
+    }
+    res.json({ ok: true, url: ALURA_CWS_URL });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

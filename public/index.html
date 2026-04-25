@@ -2610,6 +2610,32 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
       </div>
 
 
+      <!-- Step 4: Alura SEO Eklentisi -->
+      <div class="wizard-card" id="wizStepAlura">
+        <div class="wizard-step-row">
+          <span class="wizard-step-num" id="wizNumAlura">4</span>
+          <div>
+            <div class="wizard-step-title">Alura SEO Eklentisi</div>
+            <div class="wizard-step-desc">Etsy listinglerden tag/kelime cekmek icin gerekli Chrome eklentisi.</div>
+          </div>
+          <span class="wizard-step-status" id="wizStatusAlura">bekliyor</span>
+        </div>
+        <div class="wizard-step-body">
+          <div class="wizard-hint" style="margin-bottom:0.6rem;">
+            <b>Adimlar:</b><br>
+            1. Once <b>CDP browser'i baglat</b> (sidebar > Browser Bagla).<br>
+            2. Asagidaki butona bas → CDP browser'da Chrome Web Store'da Alura sayfasi acilir.<br>
+            3. <b>"Add to Chrome"</b> tikla, eklentiyi yukle.<br>
+            4. Yuklendikten sonra alttaki <b>"Yuklendi"</b> butonuna bas.
+          </div>
+          <div class="wizard-actions">
+            <button class="btn-wizard-primary" onclick="openAluraInBrowser()">Tarayicida Ac</button>
+            <button class="btn-wizard-ghost" onclick="markAluraInstalled()">Yuklendi olarak isaretle</button>
+            <span class="wizard-saved" id="wizAluraMsg"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- Summary -->
       <div class="wizard-summary" id="wizSummary">
         <div class="wizard-summary-head">Sistem Durumu</div>
@@ -2848,6 +2874,7 @@ window.updateSidebar = function(mode) {
         <div class="summary-row ${c.openrouterKey?'ok':'miss'}"><span>OpenRouter API Key</span><span>${c.openrouterKey?'hazır':'eksik'}</span></div>
         <div class="summary-row ${c.chromePath?'ok':'miss'}"><span>Chrome yolu</span><span>${c.chromePath?'bulundu':'eksik'}</span></div>
         <div class="summary-row ${c.etsyTemplateId?'ok':'miss'}"><span>Etsy şablon ID</span><span>${c.etsyTemplateId?'hazır':'eksik'}</span></div>
+        <div class="summary-row ${c.aluraInstalled?'ok':'miss'}"><span>Alura SEO eklentisi</span><span>${c.aluraInstalled?'yüklü':'YÜKLÜ DEĞİL — tag scraping için gerekli'}</span></div>
         <div class="summary-row ${c.cdpRunning?'ok':'miss'}"><span>CDP Chrome bağlı</span><span>${c.cdpRunning?'bağlı (port '+c.cdpPort+')':'BAĞLI DEĞİL — Etsy/Pinterest yayını için gerekli'}</span></div>
         <div class="summary-row ${c.etsyLoggedIn?'ok':'pending'}"><span>Etsy oturumu</span><span>${c.etsyLoggedIn?'var':'yok'}</span></div>
         <div class="summary-row ${c.pinterestLoggedIn?'ok':'pending'}"><span>Pinterest oturumu</span><span>${c.pinterestLoggedIn?'var':'yok'}</span></div>
@@ -2858,6 +2885,8 @@ window.updateSidebar = function(mode) {
     const tid = document.getElementById('wizTemplateId');
     if (tid && !tid.value && c.etsyTemplateIdValue) tid.value = c.etsyTemplateIdValue;
     renderProductTypes(c.activeProductType || 'tshirt');
+    // step Alura
+    setStepState('Alura', c.aluraInstalled);
 
     const startBtn = document.getElementById('wizStartBtn');
     if (startBtn) startBtn.disabled = !(c.wiroKey && c.openrouterKey);
@@ -2898,6 +2927,42 @@ window.updateSidebar = function(mode) {
     });
   }
 
+  window.openAluraInBrowser = async function() {
+    const msg = document.getElementById('wizAluraMsg');
+    msg.textContent = '';
+    msg.className = 'wizard-saved';
+    try {
+      const r = await fetch('/api/alura-open', { method: 'POST' });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'failed');
+      msg.textContent = 'CDP browser\'da acildi → Add to Chrome tikla';
+      msg.className = 'wizard-saved ok';
+    } catch (e) {
+      msg.textContent = 'Hata: ' + e.message + ' (once CDP browser baglat)';
+      msg.className = 'wizard-saved err';
+    }
+  };
+
+  window.markAluraInstalled = async function() {
+    const msg = document.getElementById('wizAluraMsg');
+    try {
+      const r = await fetch('/api/setup/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ aluraInstalled: true }),
+      });
+      if (!r.ok) throw new Error((await r.json()).error || 'save failed');
+      msg.textContent = 'Yuklendi olarak isaretlendi';
+      msg.className = 'wizard-saved ok';
+      refreshWizardStatus();
+      if (typeof refreshStatusBanner === 'function') refreshStatusBanner();
+      setTimeout(() => { msg.textContent = ''; }, 2500);
+    } catch (e) {
+      msg.textContent = 'Hata: ' + e.message;
+      msg.className = 'wizard-saved err';
+    }
+  };
+
   window.saveWizardEtsy = async function() {
     const etsyTemplateListingId = document.getElementById('wizTemplateId').value.trim();
     const activeChip = document.querySelector('.product-type-chip.active');
@@ -2920,7 +2985,7 @@ window.updateSidebar = function(mode) {
     }
   };
 
-  const STEP_NUMS = { Keys: '1', Chrome: '2', Etsy: '3', Login: '4' };
+  const STEP_NUMS = { Keys: '1', Chrome: '2', Etsy: '3', Alura: '4', Login: '5' };
   function setStepState(key, done) {
     const n = document.getElementById('wizNum' + key);
     const s = document.getElementById('wizStatus' + key);
@@ -6429,6 +6494,13 @@ window.updateSidebar = function(mode) {
       issues.push({
         label: 'Etsy sablon ID eksik',
         btnText: 'Sablon Ekle',
+        action: "showWizardScreen();updateSidebar('wizard')"
+      });
+    }
+    if (!c.aluraInstalled) {
+      issues.push({
+        label: 'Alura SEO eklentisi yuklu degil',
+        btnText: 'Kurulum Sihirbazi',
         action: "showWizardScreen();updateSidebar('wizard')"
       });
     }
