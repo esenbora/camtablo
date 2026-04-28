@@ -72,13 +72,13 @@ app.get('/api/brand', (req, res) => {
     const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'utf8'));
     const brand = cfg.brand || {};
     res.json({
-      name: brand.name || 'Etsy Product Creator',
+      name: brand.name || 'Glass Wall Decor Creator',
       primary: brand.primary || '#f59e0b',
       accent: brand.accent || '#a78bfa',
       logoUrl: brand.logoUrl || '',
     });
   } catch (err) {
-    res.json({ name: 'Etsy Product Creator', primary: '#f59e0b', accent: '#a78bfa', logoUrl: '' });
+    res.json({ name: 'Glass Wall Decor Creator', primary: '#f59e0b', accent: '#a78bfa', logoUrl: '' });
   }
 });
 
@@ -1038,7 +1038,7 @@ async function composeFrontBackMockup(frontDesignPath, backDesignPath, mockupPat
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'Etsy Product Creator',
+        'X-Title': 'Glass Wall Decor Creator',
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash-image',
@@ -1499,7 +1499,7 @@ Return ONLY valid JSON, no markdown, no commentary. All field values should be i
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'Etsy Product Creator',
+        'X-Title': 'Glass Wall Decor Creator',
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
@@ -1655,5 +1655,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Etsy Product Creator running at http://localhost:${PORT}`);
+  console.log(`Glass Wall Decor Creator running at http://localhost:${PORT}`);
 });

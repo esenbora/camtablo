@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Create a new branded instance of Etsy Product Creator.
+# Create a new branded instance of Glass Wall Decor Creator.
 # Usage: bash clone-instance.sh <target-dir> [brand-name] [port] [cdp-port] [primary-color]
 set -e
 

@@ -32,7 +32,7 @@ function killExistingOpera() {
 }
 
 async function main() {
-  console.log('=== Cam Tablo Browser Launcher ===');
+  console.log('=== Glass Wall Decor Browser Launcher ===');
   console.log(`Browser path: ${browserPath}`);
   console.log(`CDP port:     ${port}`);
   console.log(`Profile dir:  ${userDataDir}`);

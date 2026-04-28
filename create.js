@@ -53,7 +53,7 @@ async function main() {
     fs.mkdirSync(path.join(__dirname, dir), { recursive: true });
   });
 
-  console.log(`\n=== Etsy Product Creator ===`);
+  console.log(`\n=== Glass Wall Decor Creator ===`);
   console.log(`SKU: ${opts.sku}\n`);
 
   let designPath = opts.design;

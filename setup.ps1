@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# Etsy Product Creator - Windows kurulum scripti
+# Glass Wall Decor Creator - Windows kurulum scripti
 # Kullanim: PowerShell icinde:  .\setup.ps1
 # Eger "running scripts is disabled" hatasi alirsan:
 #   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -13,7 +13,7 @@ function Ok($msg)  { Write-Host "   $msg" -ForegroundColor Green }
 function Warn($msg){ Write-Host "   UYARI: $msg" -ForegroundColor Yellow }
 function Need($cmd) { $null -ne (Get-Command $cmd -ErrorAction SilentlyContinue) }
 
-Write-Host "=== Etsy Product Creator - Windows kurulum ===" -ForegroundColor Magenta
+Write-Host "=== Glass Wall Decor Creator - Windows kurulum ===" -ForegroundColor Magenta
 
 # 1. winget
 if (-not (Need winget)) {

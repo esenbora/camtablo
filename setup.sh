@@ -4,7 +4,7 @@ set -e
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
-echo "=== Etsy Product Creator otomatik kurulum ==="
+echo "=== Glass Wall Decor Creator otomatik kurulum ==="
 OS="$(uname -s)"
 
 # ── Helpers ──
