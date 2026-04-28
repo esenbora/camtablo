@@ -1304,6 +1304,77 @@ app.post('/api/alura-open', async (req, res) => {
   }
 });
 
+// Alura extension auto-detect: CDP browser'da Etsy listing aciyor + alura-chrome-extension element kontrol
+app.post('/api/alura-detect', async (req, res) => {
+  const { chromium } = require('playwright');
+  let browser, page;
+  try {
+    const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+    const port = cfg.cdpPort || 9333;
+
+    try {
+      browser = await chromium.connectOverCDP(`http://localhost:${port}`);
+    } catch {
+      return res.status(400).json({ error: 'CDP browser bagli degil. Once "Tarayici Bagla" yap.' });
+    }
+
+    const context = browser.contexts()[0];
+    page = await context.newPage();
+
+    // Hedef URL: template ID varsa o, yoksa stabil featured search
+    let targetUrl;
+    if (cfg.etsyTemplateListingId && /^\d+$/.test(String(cfg.etsyTemplateListingId))) {
+      targetUrl = `https://www.etsy.com/listing/${cfg.etsyTemplateListingId}`;
+    } else {
+      // Featured page'den ilk listing'i al
+      try {
+        await page.goto('https://www.etsy.com/featured', { waitUntil: 'domcontentloaded', timeout: 20000 });
+        const href = await page.locator('a[href*="/listing/"]').first().getAttribute('href', { timeout: 8000 });
+        if (href) {
+          targetUrl = href.startsWith('http') ? href : `https://www.etsy.com${href}`;
+        } else {
+          throw new Error('listing link bulunamadi');
+        }
+      } catch (e) {
+        targetUrl = 'https://www.etsy.com/listing/1467693416'; // fallback hardcoded popular listing
+      }
+    }
+
+    try {
+      await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch (e) {
+      try { await page.goto(targetUrl, { waitUntil: 'commit', timeout: 30000 }); } catch {}
+    }
+    await page.waitForTimeout(3000);
+
+    // 12s alura element bekle
+    let installed = false;
+    for (let i = 0; i < 8; i++) {
+      try {
+        installed = await page.evaluate(() => !!document.querySelector('alura-chrome-extension'));
+        if (installed) break;
+      } catch {}
+      await page.waitForTimeout(1500);
+    }
+
+    // config'e yaz
+    cfg.aluraInstalled = installed;
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
+
+    try { await page.close(); } catch {}
+    res.json({
+      installed,
+      tested: targetUrl,
+      hint: installed
+        ? 'Alura yuklu ve aktif.'
+        : 'Alura tespit edilemedi. Eklenti yuklu mu? CDP profile\'da etkin mi? "Tarayicida Ac" ile yukle.',
+    });
+  } catch (e) {
+    try { if (page) await page.close(); } catch {}
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ═══════════════════════════════════════════════
 // Product Types — mockup position presets per product
 // ═══════════════════════════════════════════════

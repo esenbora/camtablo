@@ -2634,17 +2634,15 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
         </div>
         <div class="wizard-step-body">
           <div class="wizard-hint" style="margin-bottom:1rem;">
-            Etsy listinglerden SEO etiketi cekmek icin kullanilir. <b>Kurulum adimlari:</b><br><br>
-            1. Asagidaki "Tarayicida Ac" butonuna bas — Chrome Web Store'da Alura sayfasi acilir.<br>
-            2. Sayfada <b>"Add to Chrome"</b> butonuna tikla ve eklentiyi yukle.<br>
-            3. Yukledikten sonra asagidaki <b>"Yuklendi olarak isaretle"</b> butonuna bas.
-          </div>
-          <div class="wizard-hint" style="margin-bottom:0.75rem; color: var(--amber);">
-            Not: "Tarayicida Ac" calismiyorsa once sol alttaki <b>CDP baglan</b> butonuna basin.
+            Etsy listinglerden SEO etiketi cekmek icin kullanilir. <b>Kurulum:</b><br><br>
+            1. Once sol alttaki <b>Tarayici Bagla</b> butonuyla CDP browser'i ac.<br>
+            2. <b>Tarayicida Ac</b> butonuyla Alura'nin Chrome Web Store sayfasini ac.<br>
+            3. CDP browser'da <b>"Add to Chrome"</b> tikla, eklentiyi yukle.<br>
+            4. <b>Otomatik Kontrol Et</b> bas → sistem Etsy'de listing acip Alura'yi tespit eder (~15sn).
           </div>
           <div class="wizard-actions">
-            <button class="btn-wizard-primary" onclick="openAluraInBrowser()">Tarayicida Ac</button>
-            <button class="btn-wizard-ghost" onclick="markAluraInstalled()">Yuklendi olarak isaretle</button>
+            <button class="btn-wizard-primary" onclick="detectAlura()">Otomatik Kontrol Et</button>
+            <button class="btn-wizard-ghost" onclick="openAluraInBrowser()">Tarayicida Ac</button>
             <span class="wizard-saved" id="wizAluraMsg"></span>
           </div>
         </div>
@@ -2983,6 +2981,29 @@ window.updateSidebar = function(mode) {
       refreshWizardStatus();
       if (typeof refreshStatusBanner === 'function') refreshStatusBanner();
       setTimeout(() => { msg.textContent = ''; }, 2500);
+    } catch (e) {
+      msg.textContent = 'Hata: ' + e.message;
+      msg.className = 'wizard-saved err';
+    }
+  };
+
+  window.detectAlura = async function() {
+    const msg = document.getElementById('wizAluraMsg');
+    msg.textContent = 'Tespit ediliyor (Etsy listing acip Alura aranacak, ~15sn)...';
+    msg.className = 'wizard-saved';
+    try {
+      const r = await fetch('/api/alura-detect', { method: 'POST' });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'detect failed');
+      if (d.installed) {
+        msg.textContent = '✓ Alura yuklu ve aktif';
+        msg.className = 'wizard-saved ok';
+      } else {
+        msg.textContent = '✗ ' + (d.hint || 'Alura tespit edilemedi');
+        msg.className = 'wizard-saved err';
+      }
+      refreshWizardStatus();
+      if (typeof refreshStatusBanner === 'function') refreshStatusBanner();
     } catch (e) {
       msg.textContent = 'Hata: ' + e.message;
       msg.className = 'wizard-saved err';
@@ -6525,9 +6546,9 @@ window.updateSidebar = function(mode) {
     }
     if (!c.aluraInstalled) {
       issues.push({
-        label: 'Alura SEO eklentisi yuklu degil',
-        btnText: 'Kurulum Sihirbazi',
-        action: "showWizardScreen();updateSidebar('wizard')"
+        label: 'Alura SEO eklentisi tespit edilmedi',
+        btnText: 'Kontrol Et',
+        action: "showWizardScreen();updateSidebar('wizard');setTimeout(()=>{const b=document.querySelector('#wizStepAlura .btn-wizard-primary');if(b)b.click();},500)"
       });
     }
 
