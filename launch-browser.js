@@ -5,7 +5,11 @@ const path = require('path');
 const CONFIG_PATH = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
 const port = config.cdpPort || 9333;
-const browserPath = config.operaPath || 'C:/Users/berka/AppData/Local/Programs/Opera GX/opera.exe';
+const browserPath = config.operaPath;
+if (!browserPath) {
+  console.error('ERROR: config.json icinde "operaPath" tanimli degil. Chrome/Opera path ekle.');
+  process.exit(1);
+}
 // Always use separate profile so CDP works even when user has normal Chrome open.
 // Override via config.userDataDir if needed.
 const userDataDir = config.userDataDir || path.join(__dirname, 'data', 'browser-profile');

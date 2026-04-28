@@ -1210,7 +1210,7 @@ app.get('/api/setup/status', async (req, res) => {
   const openrouterOk = !isPlaceholder(env.OPENROUTER_API_KEY);
   const templateIdOk = !!(cfg.etsyTemplateListingId && /^\d{6,15}$/.test(String(cfg.etsyTemplateListingId).trim()));
 
-  const ready = openrouterOk && chromeOk && templateIdOk;
+  const ready = openrouterOk && chromeOk && templateIdOk && !!cfg.aluraInstalled;
   res.json({
     ready,
     checks: {
@@ -1321,40 +1321,72 @@ app.post('/api/alura-detect', async (req, res) => {
     const context = browser.contexts()[0];
     page = await context.newPage();
 
-    // Hedef URL: template ID varsa o, yoksa stabil featured search
-    let targetUrl;
+    // Hedef URL'ler: template ID > search results > stable popular fallback array
+    const candidates = [];
     if (cfg.etsyTemplateListingId && /^\d+$/.test(String(cfg.etsyTemplateListingId))) {
-      targetUrl = `https://www.etsy.com/listing/${cfg.etsyTemplateListingId}`;
-    } else {
-      // Featured page'den ilk listing'i al
-      try {
-        await page.goto('https://www.etsy.com/featured', { waitUntil: 'domcontentloaded', timeout: 20000 });
-        const href = await page.locator('a[href*="/listing/"]').first().getAttribute('href', { timeout: 8000 });
-        if (href) {
-          targetUrl = href.startsWith('http') ? href : `https://www.etsy.com${href}`;
-        } else {
-          throw new Error('listing link bulunamadi');
-        }
-      } catch (e) {
-        targetUrl = 'https://www.etsy.com/listing/1467693416'; // fallback hardcoded popular listing
-      }
+      candidates.push(`https://www.etsy.com/listing/${cfg.etsyTemplateListingId}`);
     }
 
+    // Search'ten ilk gerçek listing href (sponsorlu /d/url/ URL'leri filtre)
     try {
-      await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-    } catch (e) {
-      try { await page.goto(targetUrl, { waitUntil: 'commit', timeout: 30000 }); } catch {}
-    }
-    await page.waitForTimeout(3000);
+      await page.goto('https://www.etsy.com/search?q=glass+wall+decor', { waitUntil: 'domcontentloaded', timeout: 20000 });
+      // Etsy signin'e redirect ettiyse erken çık
+      if (/\/signin/i.test(page.url())) {
+        try { await page.close(); } catch {}
+        return res.status(400).json({
+          installed: false,
+          error: 'Etsy oturumu yok. CDP browser\'da etsy.com\'a login ol, sonra tekrar dene.',
+        });
+      }
+      const href = await page.locator('a[href*="/listing/"]:not([href*="/d/url"])').first().getAttribute('href', { timeout: 8000 });
+      if (href) {
+        const absolute = href.startsWith('http') ? href : `https://www.etsy.com${href}`;
+        // Sadece /listing/<id>/ pattern'ı tut
+        const m = absolute.match(/\/listing\/(\d+)/);
+        if (m) candidates.push(`https://www.etsy.com/listing/${m[1]}`);
+      }
+    } catch {}
 
-    // 12s alura element bekle
+    // Stable popular wall decor listing fallbackleri
+    candidates.push(
+      'https://www.etsy.com/listing/1467693416',
+      'https://www.etsy.com/listing/1208745196',
+      'https://www.etsy.com/listing/1372480632'
+    );
+
     let installed = false;
-    for (let i = 0; i < 8; i++) {
+    let usedUrl = null;
+    let blockedBySignin = false;
+
+    for (const url of candidates) {
       try {
-        installed = await page.evaluate(() => !!document.querySelector('alura-chrome-extension'));
+        try {
+          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+        } catch {
+          try { await page.goto(url, { waitUntil: 'commit', timeout: 25000 }); } catch {}
+        }
+        await page.waitForTimeout(2500);
+
+        // signin redirect kontrol
+        if (/\/signin/i.test(page.url())) { blockedBySignin = true; continue; }
+
+        // listing yüklendi mi?
+        const isListing = /\/listing\/\d+/.test(page.url());
+        if (!isListing) continue;
+
+        // 10s alura element bekle
+        for (let i = 0; i < 7; i++) {
+          try {
+            installed = await page.evaluate(() => !!document.querySelector('alura-chrome-extension'));
+            if (installed) break;
+          } catch {}
+          await page.waitForTimeout(1500);
+        }
+        usedUrl = url;
         if (installed) break;
-      } catch {}
-      await page.waitForTimeout(1500);
+      } catch {
+        continue;
+      }
     }
 
     // config'e yaz
@@ -1362,13 +1394,17 @@ app.post('/api/alura-detect', async (req, res) => {
     fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
 
     try { await page.close(); } catch {}
-    res.json({
-      installed,
-      tested: targetUrl,
-      hint: installed
-        ? 'Alura yuklu ve aktif.'
-        : 'Alura tespit edilemedi. Eklenti yuklu mu? CDP profile\'da etkin mi? "Tarayicida Ac" ile yukle.',
-    });
+
+    let hint;
+    if (installed) {
+      hint = 'Alura yuklu ve aktif.';
+    } else if (blockedBySignin) {
+      hint = 'Etsy login yok (signin redirect). CDP browser\'da etsy.com\'a giris yap, sonra tekrar kontrol et.';
+    } else {
+      hint = 'Alura tespit edilemedi. Eklenti yuklu mu? CDP profile\'da etkin mi? "Tarayicida Ac" ile yukle, ekle "Add to Chrome", sonra tekrar dene.';
+    }
+
+    res.json({ installed, tested: usedUrl || candidates[0], hint });
   } catch (e) {
     try { if (page) await page.close(); } catch {}
     res.status(500).json({ error: e.message });
