@@ -1435,6 +1435,11 @@ const DEFAULT_PRODUCT_TYPES = {
     position: { x: 120, y: 100, width: 640, height: 880 },
     hint: 'Duvara asili cerceveli baski ya da kanvas, matte paper texture, realistic wall shadow, frame reflection preserved. Keep design centered within frame boundary, maintain exact aspect ratio.',
   },
+  glass: {
+    label: 'Glass Wall Decor (Cam Tablo)',
+    position: { x: 60, y: 60, width: 680, height: 880 },
+    hint: 'Tasarim tempered glass panel uzerinde; UV print parlak ve berrak, cam yuzeyinde dogal yansima/parlama kalsin, cerceve YOK, edge sharp, no fabric/canvas texture, photographic full-color print.',
+  },
   hoodie: {
     label: 'Hoodie / Sweatshirt',
     position: { x: 290, y: 380, width: 380, height: 440 },

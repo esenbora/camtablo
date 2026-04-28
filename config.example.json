@@ -1,18 +1,19 @@
 {
   "mockup": {
-    "x": 280,
-    "y": 350,
-    "width": 400,
-    "height": 500
+    "x": 60,
+    "y": 60,
+    "width": 680,
+    "height": 880
   },
   "keepPhotoIndexes": [],
   "keepPhotoCount": 6,
   "operaPath": "C:/path/to/your/browser.exe",
   "cdpPort": 9333,
   "userDataDir": "",
-  "niche": "cam-tablo",
+  "niche": "glass-wall-decor",
+  "activeProductType": "glass",
   "brand": {
-    "name": "Cam Tablo Creator",
+    "name": "Glass Wall Decor Creator",
     "primary": "#0ea5e9",
     "accent": "#8b5cf6",
     "logoUrl": ""
