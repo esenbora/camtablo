@@ -1,4 +1,4 @@
-# Cam Tablo Creator - Windows kurulum
+# Glass Wall Decor Creator - Windows kurulum
 # Kullanim: iwr -useb https://raw.githubusercontent.com/esenbora/camtablo/main/install.ps1 | iex
 # Ozel hedef: $env:TARGET="C:\camtablo"; iwr ... | iex
 
@@ -11,7 +11,7 @@ try { Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force } catch 
 $REPO_URL = "https://github.com/esenbora/camtablo.git"
 $TARGET = if ($env:TARGET) { $env:TARGET } else { Join-Path $HOME "camtablo" }
 
-Write-Host "=== Cam Tablo Creator Windows kurulum ===" -ForegroundColor Cyan
+Write-Host "=== Glass Wall Decor Creator Windows kurulum ===" -ForegroundColor Cyan
 Write-Host "Hedef: $TARGET"
 
 function Test-Command {
@@ -180,11 +180,14 @@ if (-not (Test-Path "config.json")) {
     if ($chromePath) {
         $chromeJsonPath = $chromePath -replace '\\','/'
         $config = @{
-            mockup = @{ x = 280; y = 350; width = 400; height = 500 }
+            mockup = @{ x = 60; y = 60; width = 680; height = 880 }
             keepPhotoIndexes = @()
             keepPhotoCount = 6
             operaPath = $chromeJsonPath
             cdpPort = 9333
+            niche = "glass-wall-decor"
+            activeProductType = "glass"
+            brand = @{ name = "Glass Wall Decor Creator"; primary = "#0ea5e9"; accent = "#8b5cf6"; logoUrl = "" }
         }
         $config | ConvertTo-Json -Depth 10 | Set-Content -Encoding UTF8 "config.json"
         Write-Host "   config.json yazildi"
@@ -236,7 +239,7 @@ if ($envHasPlaceholder) {
 @"
 @echo off
 cd /d "%~dp0"
-title Cam Tablo - Browser
+title Glass Wall Decor - Browser
 echo === Browser baslatiliyor (CDP modunda) ===
 echo.
 call npm run browser
@@ -249,7 +252,7 @@ pause
 @"
 @echo off
 cd /d "%~dp0"
-title Cam Tablo - Server
+title Glass Wall Decor - Server
 echo === Server baslatiliyor ===
 echo Tarayici: http://localhost:3000
 echo.
@@ -263,12 +266,12 @@ pause
 try {
     $desktop = [Environment]::GetFolderPath("Desktop")
     $wsh = New-Object -ComObject WScript.Shell
-    $lnk = $wsh.CreateShortcut((Join-Path $desktop "Etsy Creator - Server.lnk"))
+    $lnk = $wsh.CreateShortcut((Join-Path $desktop "Glass Wall - Server.lnk"))
     $lnk.TargetPath = (Join-Path $TARGET "start.bat")
     $lnk.WorkingDirectory = $TARGET
     $lnk.Save()
 
-    $lnk2 = $wsh.CreateShortcut((Join-Path $desktop "Etsy Creator - Browser.lnk"))
+    $lnk2 = $wsh.CreateShortcut((Join-Path $desktop "Glass Wall - Browser.lnk"))
     $lnk2.TargetPath = (Join-Path $TARGET "start-browser.bat")
     $lnk2.WorkingDirectory = $TARGET
     $lnk2.Save()
@@ -307,7 +310,7 @@ if ($launch -eq "" -or $launch -match "^[eEyY]") {
 } else {
     Write-Host ""
     Write-Host "MANUEL BASLATMA:"
-    Write-Host "  1. Masaustu > 'Etsy Creator - Browser' (etsy+pinterest login)"
-    Write-Host "  2. Masaustu > 'Etsy Creator - Server'"
+    Write-Host "  1. Masaustu > 'Glass Wall - Browser' (etsy+pinterest login)"
+    Write-Host "  2. Masaustu > 'Glass Wall - Server'"
     Write-Host "  3. http://localhost:3000"
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etsy Product Creator</title>
+<title>Glass Wall Decor Creator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,700&display=swap" rel="stylesheet">
 <style>
@@ -2346,7 +2346,7 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
     <div class="sidebar-logo">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="2" x2="12" y2="22" opacity="0.5"/><line x1="2" y1="8.5" x2="22" y2="8.5" opacity="0.4"/></svg>
     </div>
-    <span class="sidebar-brand" data-brand-name>Cam Tablo</span>
+    <span class="sidebar-brand" data-brand-name>Glass Wall Decor</span>
   </div>
 
   <nav class="sidebar-nav">
@@ -2588,6 +2588,9 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
           </label>
           <input type="text" id="wizCdpPort" placeholder="9333" style="max-width:130px;">
           <div class="wizard-hint">Varsayilan 9333. Baska bir program bu portu kullaniyorsa degistir.</div>
+          <div class="wizard-hint" style="margin-top:8px;color:var(--amber);">
+            <b>Onemli:</b> CDP browser <b>ayri profil</b> kullanir (data/browser-profile/). Normal Chrome'undaki Etsy/Pinterest login burada YOK. "Tarayiciyi Ac" → acilan <b>yeni</b> pencerede etsy.com ve pinterest.com'a tekrar login ol. Bu pencere arka planda acik kalmali.
+          </div>
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="saveWizardChrome()">Kaydet</button>
             <button class="btn-wizard-ghost" onclick="launchCdpFromWizard()">Tarayiciyi Ac</button>
@@ -2612,7 +2615,10 @@ input[type="number"]:focus, input[type="url"]:focus, textarea:focus, select:focu
             <a href="https://www.etsy.com/your/shops/me/tools/listings" target="_blank" rel="noopener">Etsy Listings'e Git →</a>
           </label>
           <input type="text" id="wizTemplateId" placeholder="Ornek: 1234567890" inputmode="numeric" spellcheck="false">
-          <div class="wizard-hint">Yeni urunler bu sablondan kopyalanir. <b>Nasil bulunur:</b> Etsy → Listings → kopyalanacak urunu ac → tarayici URL'sindeki sayi: /listing/<b>1234567890</b>/...</div>
+          <div class="wizard-hint">Yeni urunler bu sablondan kopyalanir. <b>Nasil bulunur:</b> CDP browser'da etsy.com'a login ol → Etsy → Your Shop → Listings → kopyalanacak urunu ac → URL'deki rakam: /listing/<b>1234567890</b>/...</div>
+          <div class="wizard-hint" style="margin-top:6px;color:var(--amber);">
+            <b>Hatirla:</b> Etsy login'i <b>CDP browser'da</b> olmali. Sidebar > Tarayici Bagla > acilan pencerede login olduktan sonra sablon ID'ni gir.
+          </div>
 
           <div class="wizard-actions">
             <button class="btn-wizard-primary" onclick="saveWizardEtsy()">Kaydet</button>
@@ -6525,16 +6531,16 @@ window.updateSidebar = function(mode) {
     }
     if (!c.etsyLoggedIn) {
       issues.push({
-        label: 'Etsy oturumu yok',
-        btnText: 'Etsy.com\'a Gir',
-        action: "window.open('https://www.etsy.com/signin','_blank')"
+        label: 'Etsy oturumu yok (CDP browser\'da login lazim)',
+        btnText: 'Tarayici Bagla',
+        action: "toggleCdp()"
       });
     }
     if (!c.pinterestLoggedIn) {
       issues.push({
-        label: 'Pinterest oturumu yok',
-        btnText: 'Pinterest\'e Gir',
-        action: "window.open('https://www.pinterest.com/login','_blank')"
+        label: 'Pinterest oturumu yok (CDP browser\'da)',
+        btnText: 'Tarayici Bagla',
+        action: "toggleCdp()"
       });
     }
     if (!c.etsyTemplateId) {

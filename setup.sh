@@ -134,11 +134,14 @@ if [ ! -f config.json ]; then
   if [ -n "$CHROME_PATH" ]; then
     cat > config.json <<EOF
 {
-  "mockup": { "x": 280, "y": 350, "width": 400, "height": 500 },
+  "mockup": { "x": 60, "y": 60, "width": 680, "height": 880 },
   "keepPhotoIndexes": [],
   "keepPhotoCount": 6,
   "operaPath": "$CHROME_PATH",
-  "cdpPort": 9333
+  "cdpPort": 9333,
+  "niche": "glass-wall-decor",
+  "activeProductType": "glass",
+  "brand": { "name": "Glass Wall Decor Creator", "primary": "#0ea5e9", "accent": "#8b5cf6", "logoUrl": "" }
 }
 EOF
     echo "   config.json yazildi"

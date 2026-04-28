@@ -4,7 +4,7 @@ set -e
 REPO_URL="https://github.com/esenbora/camtablo.git"
 TARGET_DIR="${1:-$HOME/camtablo}"
 
-echo "=== Cam Tablo Creator kurulum ==="
+echo "=== Glass Wall Decor Creator kurulum ==="
 echo "Hedef: $TARGET_DIR"
 
 need() { command -v "$1" >/dev/null 2>&1; }
